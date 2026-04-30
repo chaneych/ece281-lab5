@@ -47,9 +47,28 @@ begin
     begin
         case i_op is
             when "000" => -- Add
+                w_result <= std_logic_vector(resize(unsigned(i_A), 9) + resize(unsigned(i_B), 9)); -- Resisze in case two 8 bits are added together. Unsigned to force a data type.
             when "001" => -- Subtract
+                w_result <= std_logic_vector(resize(unsigned(i_A), 9) - resize(unsigned(i_B), 9));
             when "010" => -- And
+                w_result <= '0' & (i_A and i_B); -- '0' to force a 9 bit value
             when "011" => -- Or
-
-
+                w_result <= '0' & (i_A or i_B); -- same here
+            when others =>
+                w_result <= (others => '0');
+        end case;
+    end process;
+    
+    o_result <= w_result(7 downto 0);
+    
+    -- NZCV Flags
+    o_flags(3) <= w_result(7); -- MSB of the 8-bit result N
+    o_flags(2) <= '1' when w_result(7 downto 0) = "00000000" else '0'; -- Turn on when all zeroes Z
+    o_flags(1) <= w_result(8); -- Unsigned Overflow       C
+    -- Need two conditions, one for addition one for subtraction.
+    -- Addition overflow: A and B signs match but result is different.
+    -- Subtraction overflow: A and B signs different and result is B's sign.
+    o_flags(0) <= '1' when (i_op = "000" and (i_A(7) = i_B(7)) and (w_result(7) /= i_A(7))) else -- Addition
+                  '1' when (i_op = "001" and (i_A(7) /= i_B(7)) and (w_result(7) /= i_A(7))) else -- Subtraction
+                  '0';
 end Behavioral;
