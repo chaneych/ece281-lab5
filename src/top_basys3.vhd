@@ -154,7 +154,32 @@ begin
                     o_seg_n => w_seg);
 
 	-- CONCURRENT STATEMENTS ----------------------------
+
+    process(clk)
+    begin
+        if rising_edge(clk) then
+            if w_cycle(1) = '1' then
+                w_reg1 <= sw;
+            end if;
+            if w_cycle(2) = '1' then
+                w_reg2 <= sw;
+            end if;
+        end if;
+    end process;
+
+    w_mux_out <= w_reg1 when w_cycle(1) = '1' else
+                 w_reg2 when w_cycle(2) = '1' else
+                 w_alu_result when w_cycle(3) = '1' else
+                 "00000000";	
 	
-	
-	
+	led(3 downto 0) <= w_cycle; -- FSM state
+    led(11 downto 4) <= (others => '0'); -- unused LEDs
+    led(15 downto 12) <= w_flags; -- ALU flags
+
+    -- TODO from the schematic: blank display in Reset state
+    an <= "1111" when w_cycle(0) = '1' else w_sel; -- blank display in reset state. Anodes active low so "1111" turns all digits off
+
+    -- TODO from the schematic: need a negative sign
+    seg <= "0111111" when (w_sign = '1' and w_sel = "0111") else w_seg; -- if negative, force display '-'
+
 end top_basys3_arch;
