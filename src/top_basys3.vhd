@@ -112,9 +112,47 @@ architecture top_basys3_arch of top_basys3 is
 
 begin
 	-- PORT MAPS ----------------------------------------
+    fsm_inst : controller_fsm
+        port map (  clk => clk,
+                    i_reset => btnU,
+                    i_adv => btnC,
+                    o_cycle => w_cycle);
 
-	
-	
+    alu_inst : ALU
+        port map (  i_A => w_reg1,
+                    i_B => w_reg2,
+                    i_op => w_cycle(2 downto 0),
+                    o_result => w_alu_result,
+                    o_flags => w_flags);
+
+    clk_div_inst : clock_divider
+        generic map ( k_DIV => 10000 ) -- Need to double check this
+        port map (  i_clk => clk,
+                    i_reset => btnL,
+                    o_clk => w_clk_fast);
+
+    twoscomp_inst : twoscomp_decimal
+        port map (  i_bin => w_mux_out,
+                    o_sign => w_sign,
+                    o_hund => w_hund,
+                    o_tens => w_tens,
+                    o_ones => w_ones);
+
+    tdm_inst : TDM4
+        generic map ( k_WIDTH => 4 )
+        port map (  i_clk => w_clk_fast,
+                    i_reset => btnU,
+                    i_D3 => "0000", -- w_hund, leftmost digit not used for 2-digit display
+                    i_D2 => w_hund,
+                    i_D1 => w_tens,
+                    i_D0 => w_ones,
+                    o_data => w_hex_data,
+                    o_sel => w_sel);
+
+    sevenseg_inst : sevenseg_decoder
+        port map (  i_Hex => w_hex_data,
+                    o_seg_n => w_seg);
+
 	-- CONCURRENT STATEMENTS ----------------------------
 	
 	
