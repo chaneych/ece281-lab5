@@ -48,7 +48,7 @@ architecture top_basys3_arch of top_basys3 is
 	-- declare components and signals
 	component controller_fsm is
 	   port (  clk     : in STD_LOGIC;
-	          i_reset : in STD_LOGIC;
+	          i_reset  : in STD_LOGIC;
 	           i_adv   : in STD_LOGIC;
 	           o_cycle : out STD_LOGIC_VECTOR (3 downto 0));
 	end component;
@@ -92,6 +92,24 @@ architecture top_basys3_arch of top_basys3 is
         port (  i_Hex   : in STD_LOGIC_VECTOR (3 downto 0);
                 o_seg_n : out STD_LOGIC_VECTOR (6 downto 0));
     end component;
+
+    -- Internal Signals
+    signal w_cycle      : std_logic_vector (3 downto 0);
+    signal w_reg1       : std_logic_vector (7 downto 0) := (others => '0');
+    signal w_reg2       : std_logic_vector (7 downto 0) := (others => '0');
+    signal w_alu_result : std_logic_vector (7 downto 0);
+    signal w_flags      : std_logic_vector (3 downto 0);
+    signal w_mux_out    : std_logic_vector (7 downto 0);
+    signal w_clk_fast   : std_logic;
+    signal w_sign       : std_logic;
+    signal w_hund       : std_logic_vector (3 downto 0);
+    signal w_tens       : std_logic_vector (3 downto 0);
+    signal w_ones       : std_logic_vector (3 downto 0);
+    signal w_hex_data   : std_logic_vector (3 downto 0);
+    signal w_sel        : std_logic_vector (3 downto 0);
+    signal w_seg        : std_logic_vector (6 downto 0);
+
+
 begin
 	-- PORT MAPS ----------------------------------------
 
