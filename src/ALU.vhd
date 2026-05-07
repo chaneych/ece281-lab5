@@ -49,7 +49,7 @@ begin
             when "000" => -- Add
                 w_result <= std_logic_vector(resize(unsigned(i_A), 9) + resize(unsigned(i_B), 9)); -- Resisze in case two 8 bits are added together. Unsigned to force a data type.
             when "001" => -- Subtract
-                w_result <= std_logic_vector(resize(unsigned(i_A), 9) - resize(unsigned(i_B), 9));
+                w_result <= std_logic_vector(resize(unsigned(i_A), 9) + resize(unsigned(not i_B), 9) + 1); -- I was getting an error on this in github. Trying to fix
             when "010" => -- And
                 w_result <= '0' & (i_A and i_B); -- '0' to force a 9 bit value
             when "011" => -- Or
