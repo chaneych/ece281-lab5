@@ -121,7 +121,7 @@ begin
     alu_inst : ALU
         port map (  i_A => w_reg1,
                     i_B => w_reg2,
-                    i_op => w_cycle(2 downto 0),
+                    i_op => sw(2 downto 0), -- from switches
                     o_result => w_alu_result,
                     o_flags => w_flags);
 
