@@ -95,8 +95,9 @@ architecture top_basys3_arch of top_basys3 is
     
     component button_debounce is
         port (  clk   : in  std_logic;
-                i_btn : in  std_logic;
-                o_btn : out std_logic);
+                reset : in  std_logic;
+                button : in std_logic;
+                action : out std_logic);
     end component;
 
     -- Internal Signals
@@ -162,8 +163,9 @@ begin
                     
     debounce_inst : button_debounce
         port map (  clk   => clk,
-                    i_btn => btnC,
-                    o_btn => w_btnC_debounced);
+                    reset => btnU,
+                    button => btnC,
+                    action => w_btnC_debounced);
 
 	-- CONCURRENT STATEMENTS ----------------------------
 
