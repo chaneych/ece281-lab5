@@ -92,6 +92,12 @@ architecture top_basys3_arch of top_basys3 is
         port (  i_Hex   : in STD_LOGIC_VECTOR (3 downto 0);
                 o_seg_n : out STD_LOGIC_VECTOR (6 downto 0));
     end component;
+    
+    component button_debounce is
+        port (  clk   : in  std_logic;
+                i_btn : in  std_logic;
+                o_btn : out std_logic);
+    end component;
 
     -- Internal Signals
     signal w_cycle      : std_logic_vector (3 downto 0);
@@ -108,6 +114,7 @@ architecture top_basys3_arch of top_basys3 is
     signal w_hex_data   : std_logic_vector (3 downto 0);
     signal w_sel        : std_logic_vector (3 downto 0);
     signal w_seg        : std_logic_vector (6 downto 0);
+    signal w_btnC_debounced : std_logic; -- Added for button debounce
 
 
 begin
@@ -115,7 +122,7 @@ begin
     fsm_inst : controller_fsm
         port map (  clk => clk,
                     i_reset => btnU,
-                    i_adv => btnC,
+                    i_adv => w_btnC_debounced,
                     o_cycle => w_cycle);
 
     alu_inst : ALU
@@ -152,6 +159,11 @@ begin
     sevenseg_inst : sevenseg_decoder
         port map (  i_Hex => w_hex_data,
                     o_seg_n => w_seg);
+                    
+    debounce_inst : button_debounce
+        port map (  clk   => clk,
+                    i_btn => btnC,
+                    o_btn => w_btnC_debounced);
 
 	-- CONCURRENT STATEMENTS ----------------------------
 
