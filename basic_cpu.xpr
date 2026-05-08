@@ -132,15 +132,16 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/src/top_basys3.vhd">
+      <File Path="$PSRCDIR/sources_1/imports/src/twoscomp_decimal.vhd">
         <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/src/twoscomp_decimal.vhd"/>
+          <Attr Name="ImportTime" Val="1778256376"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/src/twoscomp_decimal.vhd">
+      <File Path="$PPRDIR/src/top_basys3.vhd">
         <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
